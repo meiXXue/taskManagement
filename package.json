@@ -1,0 +1,26 @@
+{
+  "name": "taskmanagement",
+  "version": "1.0.0",
+  "description": "keeps track of tasks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meiXXue/taskManagement.git"
+  },
+  "keywords": [
+    "task"
+  ],
+  "author": "Mei Xue",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meiXXue/taskManagement/issues"
+  },
+  "homepage": "https://github.com/meiXXue/taskManagement#readme",
+  "devDependencies": {
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2"
+  }
+}
