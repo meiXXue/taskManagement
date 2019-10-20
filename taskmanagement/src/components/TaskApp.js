@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import TaskList from './TaskList';
-import uuid from "uuid";
 
 class TaskApp extends Component {
     constructor(props) {
@@ -9,10 +8,12 @@ class TaskApp extends Component {
             num_of_tasks_shown: 0,
             num_of_tasks_shown_max: 5,
             task_list: [],
-            current_content: ''
+            current_content: '',
+            checked: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCompleteTask = this.handleCompleteTask.bind(this);
     }
 
     /**
@@ -51,15 +52,58 @@ class TaskApp extends Component {
         });
     }
 
+    /**
+     * When user clicks show more, the number of hidden tasks to be shown depends on how many tasks left to be shown.
+     * If we have more than 5 tasks that haven't be rendered, then the number of tasks to be shown will be increased by 5.
+     * If we have less than 5 tasks that haven't be rendered, then the number of tasks to be shown will be set as the length of the task list.
+     * The maximum number of tasks to be shown will be increased by five.
+     */
+    handleShowMore = () => {
+        let num_of_tasks_shown_temp =
+            (this.state.num_of_tasks_shown + 5) > this.state.task_list.length ?
+                this.state.task_list.length
+                :
+                (this.state.num_of_tasks_shown + 5);
+        this.setState({
+            num_of_tasks_shown: num_of_tasks_shown_temp,
+            num_of_tasks_shown_max: this.state.num_of_tasks_shown_max + 5
+        });
+    }
+
+    /**
+    * When user clicks show less, the number of hidden tasks to be shown depends on how many takss left to be shown.
+    * The number of tasks to be shown will be maximum number of tasks to be shown minus five (since the current number of tasks will be greater than maximum number of tasks to be shown minus five, I set the next state of current number of tasks to be multiple of 5).
+    * The maximum number of tasks to be shown will be decreased by five.
+    */
+    handleShowLess = () => {
+        let num_of_tasks_shown_temp = this.state.num_of_tasks_shown_max - 5;
+        this.setState({
+            num_of_tasks_shown: num_of_tasks_shown_temp,
+            num_of_tasks_shown_max: this.state.num_of_tasks_shown_max - 5
+        });
+    }
+
+    /**
+    * When user clicked the checkbox, the value will be set as the anti-value of the previous one.
+    * index: get from task list component, index of task list which completed flag to be modified
+    */
+    handleCompleteTask = (index) => {
+        let task_list_temp = this.state.task_list;
+        task_list_temp[index].completed = !task_list_temp[index].completed;
+        this.setState({
+            task_list: task_list_temp
+        });
+    }
+
     render() {
         return (
             <div>
                 <h3>Task Management</h3>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={(e) => this.handleSubmit(e)}>
                     <p>Enter the next task:</p>
                     <input
                         id="new_task"
-                        onChange={this.handleChange}
+                        onChange={(e) => this.handleChange(e)}
                         value={this.state.current_content}
                     />
                     <button>
@@ -67,8 +111,22 @@ class TaskApp extends Component {
                     </button>
                 </form>
                 <TaskList
+                    handleCompleteTask={this.handleCompleteTask.bind(this)}
                     {...this.state}
                 />
+                {
+                    this.state.task_list.length > this.state.num_of_tasks_shown_max ?
+                        <button onClick={() => this.handleShowMore}>Show More</button>
+                        :
+                        <div />
+                }
+                {
+                    this.state.task_list.length > 5 && this.state.num_of_tasks_shown > 5 ?
+                        <button onClick={() => this.handleShowLess}>Show Less</button>
+                        :
+                        <div />
+                }
+
             </div >
         );
     }
