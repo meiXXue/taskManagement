@@ -16,15 +16,15 @@ class TaskList extends Component {
                     this.props.task_list.map((task, index) => {
                         if ((index + 1) <= this.props.num_of_tasks_shown)
                             return (
-                                <React.Fragment key={task.id}>
-                                    < li key={task.id} id="task_list_task" >
-                                        <input type="checkbox" onClick={() => this.handleChecked(index)} /> &nbsp;
+
+                                < li key={task.id} className="task_list">
+                                    <input type="checkbox" onClick={() => this.handleChecked(index)} /> &nbsp;
                                         {index + 1}. {task.details}
-                                        {console.log(task)}
-                                    </li>
-                                </React.Fragment>
+                                    {console.log(task)}
+                                </li>
+
                             );
-                        return <div />
+                        return <div key={task.id} />
                     })
                 }
             </ul>

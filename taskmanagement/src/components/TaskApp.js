@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import TaskList from './TaskList';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button } from 'react-bootstrap';
 
 class TaskApp extends Component {
     constructor(props) {
@@ -9,7 +11,6 @@ class TaskApp extends Component {
             num_of_tasks_shown_max: 5,
             task_list: [],
             current_content: '',
-            checked: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -84,7 +85,7 @@ class TaskApp extends Component {
     }
 
     /**
-    * When user clicked the checkbox, the value will be set as the anti-value of the previous one.
+    * When user clicked the checkbox, the value will be set as the opposite value of the previous one.
     * index: get from task list component, index of task list which completed flag to be modified
     */
     handleCompleteTask = (index) => {
@@ -105,10 +106,8 @@ class TaskApp extends Component {
                         id="new_task"
                         onChange={(e) => this.handleChange(e)}
                         value={this.state.current_content}
-                    />
-                    <button>
-                        Add #{this.state.task_list.length + 1}
-                    </button>
+                    /> &nbsp;
+                    <Button variant="primary" onClick={(e) => this.handleSubmit(e)}>Add #{this.state.task_list.length + 1}</Button>
                 </form>
                 <TaskList
                     handleCompleteTask={this.handleCompleteTask.bind(this)}
@@ -116,13 +115,14 @@ class TaskApp extends Component {
                 />
                 {
                     this.state.task_list.length > this.state.num_of_tasks_shown_max ?
-                        <button onClick={() => this.handleShowMore}>Show More</button>
+                        <Button variant="light" onClick={this.handleShowMore}>Show More</Button>
                         :
                         <div />
                 }
+                &nbsp;
                 {
                     this.state.task_list.length > 5 && this.state.num_of_tasks_shown > 5 ?
-                        <button onClick={() => this.handleShowLess}>Show Less</button>
+                        <Button variant="light" onClick={this.handleShowLess}>Show Less</Button>
                         :
                         <div />
                 }
