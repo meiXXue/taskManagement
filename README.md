@@ -2,6 +2,9 @@
 	Brief Description: task management app helps user keep track of tasks
 
 # Functionalities:
+##Difference with master branch:
+	1. "Show More" Button will render 5 more JSON objects everytime it is clicked until there are no more objects to display and then change to a "Show Less" button which will decrease the number of tasks shown by 5 until there are only 5 tasks rendered.
+	2. data input are done in initializing, no data input from user.
 ## Add Task:
 	Click "Add" button will add the current user input into task list when it's not empty. The id(order of tasks added) will also show up on the button, to let user know how many tasks have already been created.
 

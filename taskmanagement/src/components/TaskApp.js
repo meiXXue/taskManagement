@@ -7,50 +7,75 @@ class TaskApp extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            num_of_tasks_shown: 0,
+            num_of_tasks_shown: 5,
             num_of_tasks_shown_max: 5,
-            task_list: [],
+            task_list: [
+                {
+                    id: 1,
+                    details: "task1",
+                    completed: false
+                },
+                {
+                    id: 2,
+                    details: "task2",
+                    completed: false
+                },
+                {
+                    id: 3,
+                    details: "task3",
+                    completed: false
+                },
+                {
+                    id: 4,
+                    details: "task4",
+                    completed: false
+                },
+                {
+                    id: 5,
+                    details: "task5",
+                    completed: false
+                },
+                {
+                    id: 6,
+                    details: "task6",
+                    completed: false
+                },
+                {
+                    id: 7,
+                    details: "task7",
+                    completed: false
+                },
+                {
+                    id: 8,
+                    details: "task8",
+                    completed: false
+                },
+                {
+                    id: 9,
+                    details: "task9",
+                    completed: false
+                },
+                {
+                    id: 10,
+                    details: "task10",
+                    completed: false
+                },
+                {
+                    id: 11,
+                    details: "task11",
+                    completed: false
+                },
+                {
+                    id: 12,
+                    details: "task12",
+                    completed: false
+                }
+
+            ],
             current_content: '',
+            reached_the_end: false
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCompleteTask = this.handleCompleteTask.bind(this);
-    }
-
-    /**
-     * When user input of task changed, the current content will be set as the user input
-     * e: event triggered by user
-    **/
-    handleChange(e) {
-        this.setState({ current_content: e.target.value });
-    }
-
-    /**
-     * When user submit the task changed, a new task with id (sequentially increased with the length of task list),
-     * completed flag default as false, and details from current content will be added into task list.
-     * Number of tasks to be shown will increase by 1 if it did not exceed the maximum number of tasks that can be rendered.
-     * Current content will be reset to empty and wait for a new user input.
-     * e: event triggered by user
-    **/
-    handleSubmit(e) {
-        e.preventDefault();
-        if (!this.state.current_content.length) {
-            return;
-        }
-        const newTask = {
-            details: this.state.current_content,
-            id: this.state.task_list.length + 1,
-            completed: false
-        };
-        let num_of_tasks_shown_temp = this.state.num_of_tasks_shown;
-        if (this.state.task_list.length < this.state.num_of_tasks_shown_max) {
-            num_of_tasks_shown_temp += 1;
-        }
-        this.setState({
-            task: this.state.task_list.push(newTask),
-            current_content: '',
-            num_of_tasks_shown: num_of_tasks_shown_temp
-        });
     }
 
     /**
@@ -65,22 +90,26 @@ class TaskApp extends Component {
                 this.state.task_list.length
                 :
                 (this.state.num_of_tasks_shown + 5);
+        let reach_end = num_of_tasks_shown_temp === this.state.task_list.length ? true : false;
         this.setState({
             num_of_tasks_shown: num_of_tasks_shown_temp,
-            num_of_tasks_shown_max: this.state.num_of_tasks_shown_max + 5
+            num_of_tasks_shown_max: this.state.num_of_tasks_shown_max + 5,
+            reached_the_end: reach_end
         });
     }
 
     /**
-    * When user clicks show less, the number of hidden tasks to be shown depends on how many takss left to be shown.
+    * When user clicks show less, the number of hidden tasks to be shown depends on how many tasks left to be shown.
     * The number of tasks to be shown will be maximum number of tasks to be shown minus five (since the current number of tasks will be greater than maximum number of tasks to be shown minus five, I set the next state of current number of tasks to be multiple of 5).
     * The maximum number of tasks to be shown will be decreased by five.
     */
     handleShowLess = () => {
         let num_of_tasks_shown_temp = this.state.num_of_tasks_shown_max - 5;
+        let reach_end = num_of_tasks_shown_temp === 5 ? false : true;
         this.setState({
             num_of_tasks_shown: num_of_tasks_shown_temp,
-            num_of_tasks_shown_max: this.state.num_of_tasks_shown_max - 5
+            num_of_tasks_shown_max: this.state.num_of_tasks_shown_max - 5,
+            reached_the_end: reach_end
         });
     }
 
@@ -100,31 +129,15 @@ class TaskApp extends Component {
         return (
             <div>
                 <h3>Task Management</h3>
-                <form onSubmit={(e) => this.handleSubmit(e)}>
-                    <p>Enter the next task:</p>
-                    <input
-                        id="new_task"
-                        onChange={(e) => this.handleChange(e)}
-                        value={this.state.current_content}
-                    /> &nbsp;
-                    <Button variant="primary" onClick={(e) => this.handleSubmit(e)}>Add #{this.state.task_list.length + 1}</Button>
-                </form>
                 <TaskList
                     handleCompleteTask={this.handleCompleteTask.bind(this)}
                     {...this.state}
                 />
                 {
-                    this.state.task_list.length > this.state.num_of_tasks_shown_max ?
+                    !this.state.reached_the_end ?
                         <Button variant="light" onClick={this.handleShowMore}>Show More</Button>
                         :
-                        <div />
-                }
-                &nbsp;
-                {
-                    this.state.task_list.length > 5 && this.state.num_of_tasks_shown > 5 ?
                         <Button variant="light" onClick={this.handleShowLess}>Show Less</Button>
-                        :
-                        <div />
                 }
 
             </div >
